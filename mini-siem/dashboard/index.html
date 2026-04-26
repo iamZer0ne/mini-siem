@@ -2,21 +2,68 @@
 <html>
 <head>
     <title>Mini SIEM Dashboard</title>
+    <style>
+        body {
+            font-family: Arial;
+            background: #0f172a;
+            color: white;
+            padding: 20px;
+        }
+        .card {
+            background: #1e293b;
+            padding: 15px;
+            margin: 10px;
+            border-radius: 10px;
+        }
+        .high { color: red; }
+        .normal { color: lightgreen; }
+    </style>
 </head>
 <body>
-    <h2>Mini SIEM Dashboard</h2>
-    <button onclick="loadLogs()">Refresh</button>
-    <pre id="output"></pre>
 
-    <script>
-        async function loadLogs() {
-            const res = await fetch("https://mini-siem-1.onrender.com/logs");
-            const data = await res.json();
-            document.getElementById("output").innerText =
-                JSON.stringify(data, null, 2);
-        }
+<h2>🛡️ Mini SIEM Dashboard</h2>
+<button onclick="loadLogs()">Refresh</button>
 
-        loadLogs();
-    </script>
+<div id="devices"></div>
+
+<script>
+async function loadLogs() {
+    const res = await fetch("https://mini-siem-1.onrender.com/logs");
+    const data = await res.json();
+
+    const container = document.getElementById("devices");
+    container.innerHTML = "";
+
+    // Group by hostname
+    const devices = {};
+    data.forEach(log => {
+        devices[log.hostname] = log;
+    });
+
+    for (let host in devices) {
+        const d = devices[host];
+
+        const cpuClass = d.cpu > 80 ? "high" : "normal";
+
+        const card = `
+            <div class="card">
+                <h3>${host}</h3>
+                <p>🕒 ${d.timestamp}</p>
+                <p class="${cpuClass}">CPU: ${d.cpu}%</p>
+                <p>Memory: ${d.memory}%</p>
+                <p>Processes:</p>
+                <ul>
+                    ${d.processes.map(p => `<li>${p.name} (PID: ${p.pid})</li>`).join("")}
+                </ul>
+            </div>
+        `;
+
+        container.innerHTML += card;
+    }
+}
+
+loadLogs();
+</script>
+
 </body>
 </html>
