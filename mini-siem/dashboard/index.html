@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Mini SIEM Dashboard</title>
+</head>
+<body>
+    <h2>Mini SIEM Dashboard</h2>
+    <button onclick="loadLogs()">Refresh</button>
+    <pre id="output"></pre>
+
+    <script>
+        async function loadLogs() {
+            const res = await fetch("https://your-app.onrender.com/logs");
+            const data = await res.json();
+            document.getElementById("output").innerText =
+                JSON.stringify(data, null, 2);
+        }
+
+        loadLogs();
+    </script>
+</body>
+</html>
