@@ -1,11 +1,19 @@
 from fastapi import FastAPI, Header, HTTPException
+from fastapi.middleware.cors import CORSMiddleware
 from typing import Dict
 from datetime import datetime
 
 app = FastAPI()
 
-DB = []
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
+DB = []
 VALID_KEYS = ["device-1-key", "device-2-key"]
 
 @app.get("/")
