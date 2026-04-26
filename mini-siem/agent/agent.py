@@ -3,7 +3,7 @@ import socket
 import psutil
 import time
 
-SERVER_URL = "https://your-app.onrender.com/logs"
+SERVER_URL = "https://mini-siem-1.onrender.com/logs"
 API_KEY = "device-1-key"
 
 def collect_data():
