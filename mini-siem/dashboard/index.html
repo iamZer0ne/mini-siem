@@ -10,7 +10,7 @@
 
     <script>
         async function loadLogs() {
-            const res = await fetch("https://your-app.onrender.com/logs");
+            const res = await fetch("https://mini-siem-1.onrender.com/logs");
             const data = await res.json();
             document.getElementById("output").innerText =
                 JSON.stringify(data, null, 2);
